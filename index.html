@@ -25,7 +25,7 @@
                 <h1>Highscore</h1>
                 <h1 id="highscore">0</h1>
             </div>
-            <p>Press Space To Start</p>
+            <p>Press Space Or Click To Start</p>
         </div>
     </section>
 
@@ -38,13 +38,19 @@
         </div>
     </section>
 
-    <section id="question">
-
+    <section id="question-section">
+        <div class="wrapper">
+            <h1 id="question">question</h1>
+            <button onclick="guess(0)" id="0">0</button>
+            <button onclick="guess(1)" id="1">1</button>
+            <button onclick="guess(2)" id="2">2</button>
+        </div>
     </section>
 
 </body>
 
 <!-- Scripts -->
+<script src="./script/data.js"></script>
 <script src="./script/game.js"></script>
 
 </html>

@@ -2,6 +2,12 @@ const menu = document.getElementById("menu")
 const scoreElement = document.getElementById("score")
 const highscoreElement = document.getElementById("highscore")
 
+const questionSection = document.getElementById("question-section")
+const question = document.getElementById("question")
+const zero = document.getElementById("0")
+const one = document.getElementById("1")
+const two = document.getElementById("2")
+
 /**
  * Represents the game states.
  */
@@ -29,7 +35,7 @@ document.body.onkeyup = function(event) {
     || event.code == "Space"   
     || event.keyCode == 32) {
 
-        console.log("Key: Space")
+        console.log("Event: Space")
 
         if (gameState == GameState.Stopped) {
             Game.start()
@@ -41,7 +47,7 @@ document.body.onkeyup = function(event) {
 }
 
 document.body.addEventListener('click', function(event) {
-    console.log("Key: Click")
+    console.log("Event: Click")
 
         if (gameState == GameState.Stopped) {
             Game.start()
@@ -51,6 +57,23 @@ document.body.addEventListener('click', function(event) {
         Player.jump()
 }, true); 
 
+function guess(number) {
+    if (Game.question == 0) return
+
+    scoreElement.style.display = 'block'
+    
+    if (Game.question['answer'] == number) {
+        questionSection.style.display = 'none'
+        Obstical.hold = false
+        Game.cycle = 0
+        return
+    }
+
+    questionSection.style.display = 'none'
+    Obstical.hold = false
+    Game.stop()
+}
+
 /**
  * Represents the game controller.
  */
@@ -58,12 +81,24 @@ class Game {
 
     static interval
 
+    static question = 0
+
+    static amountTillQuestion = 50
+    static cycle = 0
+
     /**
      * Represents the game loop.
      */
     static loop() {
         Player.update()
         Obstical.update()
+
+        if (Game.cycle >= Game.amountTillQuestion) {
+            Game.cycle = 0
+            Game.askQuestion()
+        }
+
+        Game.cycle += 1
     }
 
     /**
@@ -90,9 +125,10 @@ class Game {
 
         Game.interval = setInterval(Game.loop, 100)
 
-        score = 0
-
         Obstical.x = Obstical.startX
+        score = 0
+        scoreElement.innerHTML = 0
+        Game.cycle = 0
     }
 
     static getWidth() {
@@ -102,6 +138,22 @@ class Game {
     static incrementScore() {
         score += 1
         scoreElement.innerHTML = score
+    }
+
+    static askQuestion() {
+        console.log("Event: Question")
+        Game.question = Questions.getRandom()
+
+        Obstical.hold = true
+
+        question.innerHTML = Game.question['question']
+        zero.innerHTML = Game.question[0]
+        one.innerHTML = Game.question[1]
+        two.innerHTML = Game.question[2]
+
+        questionSection.style.display = 'block'
+
+        scoreElement.style.display = 'none'
     }
 }
 
@@ -154,9 +206,6 @@ class Player {
 
         var player = Player.get().getBoundingClientRect();
         var obj = element.getBoundingClientRect();
-
-        console.log(player)
-        console.log(obj)
 
         if (obj.right >= player.right && obj.right <= player.right + 40) return true
         return false

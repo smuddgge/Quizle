@@ -67,6 +67,15 @@ section {
 /*                   Question
 ====================         ====================*/
 
-#question {
+#question-section {
     display: none;
+    z-index: 3;
+}
+
+#question-section .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 4em;
+    gap: 1em;
 }
