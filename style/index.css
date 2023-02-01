@@ -1,0 +1,72 @@
+section {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgb(0, 0, 0, 0.6);
+}
+
+/*                   Menu
+====================         ====================*/
+#menu {
+    z-index: 2;
+}
+
+#menu .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 4em;
+    gap: 10em;
+}
+
+#menu .wrapper .statistics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 4em;
+}
+/*                   Game
+====================         ====================*/
+
+#score {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+}
+
+#line {
+    position: fixed;
+    top: 540px;
+    width: 100%;
+    height: 40px;
+}
+
+#player {
+    position: fixed;
+    top: 500px;
+    left: 10%;
+    width: 40px;
+    height: 40px;
+}
+
+#obstical {
+    position: fixed;
+    top: 500px;
+    right: -40px;
+    width: 40px;
+    height: 40px;
+}
+
+#obstical img {
+    width: 40px;
+    height: 40px;
+}
+
+/*                   Question
+====================         ====================*/
+
+#question {
+    display: none;
+}
