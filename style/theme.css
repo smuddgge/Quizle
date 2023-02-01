@@ -84,3 +84,7 @@ input {
 #player {
     background-color: var(--c4);
 }
+
+#cover {
+    background-color: var(--c1);
+}

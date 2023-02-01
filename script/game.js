@@ -197,6 +197,10 @@ class Player {
         return document.getElementById("player")
     }
 
+    static getScan() {
+        return document.getElementById("scan")
+    }
+
     /**
      * Used to make the player jump.
      */
@@ -235,12 +239,13 @@ class Player {
         }
 
         Player.get().style.top = final + "px"
+        Player.getScan().style.top = final + "px"
     }
 
     static checkCollision(element) {
         var player = Player.get().getBoundingClientRect();
         var obj = element.getBoundingClientRect();
-        
+
         if (player.top < obj.top - 40) return false
 
         if (obj.right >= player.right && obj.right <= player.right + 40) return true
