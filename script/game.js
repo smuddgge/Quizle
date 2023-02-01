@@ -215,7 +215,7 @@ class Player {
 class Obstical {
 
     static x = -40
-    static moveBy = 40
+    static moveBy = 30
     static startX = -40
 
     static hold = false
