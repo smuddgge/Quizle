@@ -64,6 +64,33 @@ section {
     height: 40px;
 }
 
+#obstical-large {
+    position: fixed;
+    top: 460px;
+    right: -40px;
+    width: 40px;
+    height: 80px;
+}
+
+#obstical-large img {
+    width: 40px;
+    height: 80px;
+}
+
+#tip {
+    position: absolute;
+    top: 90%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 50em) {
+    #tip p {
+        font-size: 1rem;
+    }
+}
+
 /*                   Question
 ====================         ====================*/
 

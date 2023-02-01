@@ -49,12 +49,12 @@ document.body.onkeyup = function(event) {
 document.body.addEventListener('click', function(event) {
     console.log("Event: Click")
 
-        if (gameState == GameState.Stopped) {
-            Game.start()
-            return
-        }
+    if (gameState == GameState.Stopped) {
+        Game.start()
+        return
+    }
 
-        Player.jump()
+    Player.jump()
 }, true); 
 
 function guess(number) {
@@ -65,12 +65,16 @@ function guess(number) {
     if (Game.question['answer'] == number) {
         questionSection.style.display = 'none'
         Obstical.hold = false
+        ObsticalLarge.hold = false
+        Player.hold = false
         Game.cycle = 0
         return
     }
 
     questionSection.style.display = 'none'
     Obstical.hold = false
+    ObsticalLarge.hold = false
+    Player.hold = false
     Game.stop()
 }
 
@@ -85,6 +89,8 @@ class Game {
 
     static amountTillQuestion = 50
     static cycle = 0
+    
+    static totalCycles = 0
 
     /**
      * Represents the game loop.
@@ -93,12 +99,17 @@ class Game {
         Player.update()
         Obstical.update()
 
+        if (Game.cycle % 2 == 0 && Game.totalCycles >= 100) {
+            ObsticalLarge.update()
+        } 
+
         if (Game.cycle >= Game.amountTillQuestion) {
             Game.cycle = 0
             Game.askQuestion()
         }
 
         Game.cycle += 1
+        Game.totalCycles += 1
     }
 
     /**
@@ -114,6 +125,10 @@ class Game {
             highscore = score
             highscoreElement.innerHTML = highscore
         }
+
+        Game.cycle = 0
+        Game.totalCycles = 0
+        Obstical.x = Obstical.startX
     }
 
     /**
@@ -123,12 +138,17 @@ class Game {
         gameState = GameState.Running
         menu.style.display = 'none'
 
-        Game.interval = setInterval(Game.loop, 100)
+        Game.interval = setInterval(Game.loop, 80)
 
         Obstical.x = Obstical.startX
+
         score = 0
         scoreElement.innerHTML = 0
+
         Game.cycle = 0
+        Game.totalCycles = 0
+
+        ObsticalLarge.get().style.right = "-40px"
     }
 
     static getWidth() {
@@ -145,6 +165,8 @@ class Game {
         Game.question = Questions.getRandom()
 
         Obstical.hold = true
+        ObsticalLarge.hold = true
+        Player.hold = true
 
         question.innerHTML = Game.question['question']
         zero.innerHTML = Game.question[0]
@@ -159,12 +181,14 @@ class Game {
 
 class Player {
 
-    static gravity = 9.8
+    static gravity = -9.8
     static velocity = 0
     static y = 0
 
     static allowedJumps = 3
     static jumps = 2
+
+    static hold = false
 
     /**
      * Used to get the player.
@@ -187,14 +211,26 @@ class Player {
      * Use to make the player jump.
      */
     static update() {
-        Player.y -= Player.velocity
-        Player.velocity -= Player.gravity
 
-        let final = fromTop + Player.y
+        if (Player.hold) return
 
+        // Add the velocity.
+        Player.y += Player.velocity
+
+        // Add gravity to velocity.
+        Player.velocity += Player.gravity
+
+        // The final distance from the top of the screen.
+        let final = fromTop - Player.y
+
+        console.log()
+
+        // If final distance is bigger then 500,
+        // put it on the line and reset.
         if (final >= fromTop) {
             final = fromTop
             Player.velocity = 0
+            Player.y = 0
             Player.jumps = Player.allowedJumps
         }
 
@@ -202,10 +238,10 @@ class Player {
     }
 
     static checkCollision(element) {
-        if (Player.y <= -40) return false
-
         var player = Player.get().getBoundingClientRect();
         var obj = element.getBoundingClientRect();
+        
+        if (player.top < obj.top - 40) return false
 
         if (obj.right >= player.right && obj.right <= player.right + 40) return true
         return false
@@ -215,7 +251,7 @@ class Player {
 class Obstical {
 
     static x = -40
-    static moveBy = 30
+    static moveBy = 20
     static startX = -40
 
     static hold = false
@@ -247,6 +283,46 @@ class Obstical {
             }
 
             Obstical.x = Obstical.startX
+            Game.incrementScore()
+        }
+    }
+}
+
+class ObsticalLarge {
+
+    static x = -40
+    static moveBy = 20
+    static startX = -40
+
+    static hold = false
+
+    /**
+     * Used to get the player.
+     */
+    static get() {
+        return document.getElementById("obstical-large")
+    }
+
+    static update() {
+        if (ObsticalLarge.hold) return
+
+        ObsticalLarge.x += ObsticalLarge.moveBy
+
+        if (Player.checkCollision(ObsticalLarge.get())) {
+            Game.stop()
+        }
+
+        ObsticalLarge.get().style.right = ObsticalLarge.x + "px"
+
+        if (ObsticalLarge.x >= Game.getWidth()) {
+
+            if (Game.getWidth() <= 1000) {
+                if (ObsticalLarge.x <= 1000) {
+                    return
+                }
+            }
+
+            ObsticalLarge.x = ObsticalLarge.startX
             Game.incrementScore()
         }
     }

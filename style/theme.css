@@ -9,6 +9,12 @@
 
 /*                   Default
 ====================         ====================*/
+* {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
 html {
     max-width: 900px;
     margin: 0 auto;
