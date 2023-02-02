@@ -1,6 +1,7 @@
 const menu = document.getElementById("menu")
 const scoreElement = document.getElementById("score")
 const highscoreElement = document.getElementById("highscore")
+const tip = document.getElementById("tip-p")
 
 const questionSection = document.getElementById("question-section")
 const question = document.getElementById("question")
@@ -68,6 +69,7 @@ function guess(number) {
         ObsticalLarge.hold = false
         Player.hold = false
         Game.cycle = 0
+        Game.question = 0
         return
     }
 
@@ -76,6 +78,7 @@ function guess(number) {
     ObsticalLarge.hold = false
     Player.hold = false
     Game.stop()
+    Game.question = 0
 }
 
 /**
@@ -118,6 +121,8 @@ class Game {
     static stop() {
         gameState = GameState.Stopped
         menu.style.display = 'block'
+        scoreElement.style.display = 'none'
+        tip.style.display = 'none'
 
         clearInterval(Game.interval)
 
@@ -137,6 +142,8 @@ class Game {
     static start() {
         gameState = GameState.Running
         menu.style.display = 'none'
+        scoreElement.style.display = 'block'
+        tip.style.display = 'block'
 
         Game.interval = setInterval(Game.loop, 80)
 
@@ -161,6 +168,8 @@ class Game {
     }
 
     static askQuestion() {
+        if (Game.question != 0) return
+
         console.log("Event: Question")
         Game.question = Questions.getRandom()
 

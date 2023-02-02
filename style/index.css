@@ -31,6 +31,7 @@ section {
 ====================         ====================*/
 
 #score {
+    display: none;
     position: fixed;
     top: 10%;
     left: 10%;
@@ -102,6 +103,10 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+#tip p {
+    display: none;
 }
 
 @media (max-width: 50em) {
